@@ -152,33 +152,33 @@ class DoubleStrandAlignment:
         raise ValueError(f"{fwd_st}-{fwd_en}, {rev_st}-{rev_en}")
 
     @property
-    def length_fwd(self) -> int:
+    def len_fwd(self) -> int:
         """Length of the forward mapping strand."""
         fwd_st = self.fwd.pysam.reference_start
         fwd_en = self.fwd.pysam.reference_end
         return fwd_en - fwd_st  # ty: ignore
 
     @property
-    def length_rev(self) -> int:
+    def len_rev(self) -> int:
         """Length of the reverse mapping strand."""
         rev_st = self.rev.pysam.reference_start
         rev_en = self.rev.pysam.reference_end
         return rev_en - rev_st  # ty: ignore
 
     @property
-    def length_sum(self) -> int:
+    def len_sum(self) -> int:
         """Length of the forward and reverse mapping strands summed."""
-        return self.length_fwd + self.length_rev
+        return self.len_fwd + self.len_rev
 
     @property
-    def length_long(self) -> int:
+    def len_long(self) -> int:
         """Length of the longest of the two mapping strands."""
-        return max(self.length_fwd, self.length_rev)
+        return max(self.len_fwd, self.len_rev)
 
     @property
-    def length_short(self) -> int:
+    def len_short(self) -> int:
         """Length of the shortest of the two mapping strands."""
-        return min(self.length_fwd, self.length_rev)
+        return min(self.len_fwd, self.len_rev)
 
     @property
     def longest_strand(self) -> str:
@@ -186,9 +186,9 @@ class DoubleStrandAlignment:
 
         Can be 'fwd', 'rev', or 'both' if both strands are equally long.
         """
-        if self.length_fwd > self.length_rev:
+        if self.len_fwd > self.len_rev:
             return "fwd"
-        elif self.length_fwd < self.length_rev:
+        elif self.len_fwd < self.len_rev:
             return "rev"
         else:
             return "both"
@@ -199,15 +199,15 @@ class DoubleStrandAlignment:
 
         Can be 'fwd', 'rev', or 'both' if both strands are equally short.
         """
-        if self.length_fwd > self.length_rev:
+        if self.len_fwd > self.len_rev:
             return "rev"
-        elif self.length_fwd < self.length_rev:
+        elif self.len_fwd < self.len_rev:
             return "fwd"
         else:
             return "both"
 
     @property
-    def length_doublestrand(self) -> int:
+    def len_doublestrand(self) -> int:
         """Length of the double strand portion between the two mapping strands.
 
         ??? info "Click to expand for visual representations of each type"
@@ -261,7 +261,7 @@ class DoubleStrandAlignment:
         return end - start
 
     @property
-    def length_span(self) -> int:
+    def len_span(self) -> int:
         """Length of from the most 5' aligned based to the 3' most aligned based on
         either strand.
 
@@ -315,41 +315,37 @@ class DoubleStrandAlignment:
         return end - start
 
     @property
-    def length_reference_fiveprime_fwd(self) -> int:
+    def len_ref_fiveprime_fwd(self) -> int:
         """Length of the overhang of the 5' reference overhang on the forward strand"""
         return max(self.rev.pysam.reference_start - self.fwd.pysam.reference_start, 0)
 
     @property
-    def length_reference_fiveprime_rev(self) -> int:
+    def len_ref_fiveprime_rev(self) -> int:
         """Length of the overhang of the 5' reference overhang on the reverse strand"""
         return max(self.fwd.pysam.reference_start - self.rev.pysam.reference_start, 0)
 
     @property
-    def length_reference_threeprime_fwd(self) -> int:
+    def len_ref_threeprime_fwd(self) -> int:
         """Length of the overhang of the 3' reference overhang on the forward strand"""
         return max(self.fwd.pysam.reference_end - self.rev.pysam.reference_end, 0)  # ty: ignore
 
     @property
-    def length_reference_threeprime_rev(self) -> int:
+    def len_ref_threeprime_rev(self) -> int:
         """Length of the overhang of the 3' reference overhang on the reverse strand"""
         return max(self.rev.pysam.reference_end - self.fwd.pysam.reference_end, 0)  # ty: ignore
 
     @property
-    def length_reference_fiveprime(self) -> int:
+    def len_ref_fiveprime(self) -> int:
         """Length of the overhang of the 5' reference overhang, regardless of the strand"""
-        return max(
-            self.length_reference_fiveprime_fwd, self.length_reference_fiveprime_rev
-        )
+        return max(self.len_ref_fiveprime_fwd, self.len_ref_fiveprime_rev)
 
     @property
-    def length_reference_threeprime(self) -> int:
+    def len_ref_threeprime(self) -> int:
         """Length of the overhang of the 3' reference overhang, regardless of the strand"""
-        return max(
-            self.length_reference_threeprime_fwd, self.length_reference_threeprime_rev
-        )
+        return max(self.len_ref_threeprime_fwd, self.len_ref_threeprime_rev)
 
     @property
-    def length_endrepair(self) -> int:
+    def len_endrepair(self) -> int:
         """Length of the molecule if end repair was done
 
         End repairs blunts a double stranded DNA molecule by filling the 5' overhang
@@ -459,9 +455,7 @@ class DoubleStrandAlignment:
             ```
         """
 
-        return (
-            self.length_reference_fiveprime_rev + self.length_reference_threeprime_fwd
-        )
+        return self.len_ref_fiveprime_rev + self.len_ref_threeprime_fwd
 
     @property
     def endrepair_filled_bases(self) -> int:
@@ -516,9 +510,7 @@ class DoubleStrandAlignment:
             ```
         """
 
-        return (
-            self.length_reference_fiveprime_fwd + self.length_reference_threeprime_rev
-        )
+        return self.len_ref_fiveprime_fwd + self.len_ref_threeprime_rev
 
     @property
     def name(self) -> str | None:
@@ -541,14 +533,14 @@ class DoubleStrandAlignment:
         """
 
         fwd_str_print = (
-            "_" * self.length_reference_fiveprime_rev  # ty: ignore
+            "_" * self.len_ref_fiveprime_rev  # ty: ignore
             + self.fwd.pysam.query_sequence
-            + "_" * self.length_reference_threeprime_rev
+            + "_" * self.len_ref_threeprime_rev
         )
         rev_str_print = (
-            "_" * self.length_reference_fiveprime_fwd  # ty: ignore
+            "_" * self.len_ref_fiveprime_fwd  # ty: ignore
             + self.rev.pysam.query_sequence
-            + "_" * self.length_reference_threeprime_fwd
+            + "_" * self.len_ref_threeprime_fwd
         )
 
         return fwd_str_print, rev_str_print
@@ -557,6 +549,16 @@ class DoubleStrandAlignment:
     def is_duplicate(self) -> bool:
         """Return true if read is marked as duplicate"""
         return self.fwd.pysam.is_duplicate
+
+    @property
+    def has_rotations(self) -> bool:
+        """Return true if the read has more than one possible rotation"""
+        return self.fwd.pysam.get_tag("YR") > 1  # ty: ignore
+
+    @property
+    def rotation_num(self) -> int:
+        """Rotation index of this read"""
+        return self.fwd.pysam.get_tag("YO")  # ty: ignore
 
 
 def to_dict(obj):

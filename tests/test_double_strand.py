@@ -5,7 +5,7 @@ Strategy
 --------
 Neither Alignment nor DoubleStrandAlignment care what concrete object sits
 behind `Alignment.pysam` -- they only ever read a handful of attributes off
-it: reference_start, reference_end, is_forward, query_sequence, query_name,
+it: ref_start, ref_end, is_forward, query_sequence, query_name,
 is_mapped. `Alignment.__init__` doesn't type-check its `pysam` argument at
 all, and `DoubleStrandAlignment.__init__` only checks `isinstance(x,
 Alignment)`. So instead of constructing a real (annoying-to-build)
@@ -37,6 +37,12 @@ class FakeAlignedSegment:
     def __post_init__(self):
         if self.query_sequence is None:
             self.query_sequence = "N" * (self.reference_end - self.reference_start)
+
+    def get_tag(self, tag: str):
+        if tag == "YR":
+            return 1
+        if tag == "YO":
+            return 0
 
 
 def make_alignment(start: int, end: int, is_forward: bool, **kwargs) -> Alignment:
@@ -189,9 +195,9 @@ def test_type_classification(fwd_coords, rev_coords, expected_type):
         ]
     ),
 )
-def test_length_fwd(fwd_coords, rev_coords, expected):
+def test_len_fwd(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_fwd == expected
+    assert ds.len_fwd == expected
 
 
 @pytest.mark.parametrize(
@@ -210,13 +216,13 @@ def test_length_fwd(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_rev(fwd_coords, rev_coords, expected):
+def test_len_rev(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_rev == expected
+    assert ds.len_rev == expected
 
 
 # # ---------------------------------------------------------------------------
-# # length_sum / length_long / length_short / longest_strand / shortest_strand
+# # len_sum / len_long / len_short / longest_strand / shortest_strand
 # # ---------------------------------------------------------------------------
 
 
@@ -236,9 +242,9 @@ def test_length_rev(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_sum(fwd_coords, rev_coords, expected):
+def test_len_sum(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_sum == expected
+    assert ds.len_sum == expected
 
 
 @pytest.mark.parametrize(
@@ -257,9 +263,9 @@ def test_length_sum(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_long(fwd_coords, rev_coords, expected):
+def test_len_long(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_long == expected
+    assert ds.len_long == expected
 
 
 @pytest.mark.parametrize(
@@ -278,9 +284,9 @@ def test_length_long(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_short(fwd_coords, rev_coords, expected):
+def test_len_short(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_short == expected
+    assert ds.len_short == expected
 
 
 @pytest.mark.parametrize(
@@ -326,7 +332,7 @@ def test_shortest_strand(fwd_coords, rev_coords, expected):
 
 
 # # ---------------------------------------------------------------------------
-# # length_doublestrand / length_span
+# # len_doublestrand / len_span
 # # ---------------------------------------------------------------------------
 
 
@@ -346,9 +352,9 @@ def test_shortest_strand(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_doublestrand(fwd_coords, rev_coords, expected):
+def test_len_doublestrand(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_doublestrand == expected
+    assert ds.len_doublestrand == expected
 
 
 @pytest.mark.parametrize(
@@ -367,13 +373,13 @@ def test_length_doublestrand(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_span(fwd_coords, rev_coords, expected):
+def test_len_span(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_span == expected
+    assert ds.len_span == expected
 
 
 # ---------------------------------------------------------------------------
-# length_reference_fiveprime_fwd / _rev, length_reference_threeprime_fwd / _rev
+# len_ref_fiveprime_fwd / _rev, len_ref_threeprime_fwd / _rev
 # ---------------------------------------------------------------------------
 
 
@@ -393,9 +399,9 @@ def test_length_span(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_reference_fiveprime_fwd(fwd_coords, rev_coords, expected):
+def test_len_ref_fiveprime_fwd(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_reference_fiveprime_fwd == expected
+    assert ds.len_ref_fiveprime_fwd == expected
 
 
 @pytest.mark.parametrize(
@@ -414,9 +420,9 @@ def test_length_reference_fiveprime_fwd(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_reference_fiveprime_rev(fwd_coords, rev_coords, expected):
+def test_len_ref_fiveprime_rev(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_reference_fiveprime_rev == expected
+    assert ds.len_ref_fiveprime_rev == expected
 
 
 @pytest.mark.parametrize(
@@ -435,9 +441,9 @@ def test_length_reference_fiveprime_rev(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_reference_threeprime_fwd(fwd_coords, rev_coords, expected):
+def test_len_ref_threeprime_fwd(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_reference_threeprime_fwd == expected
+    assert ds.len_ref_threeprime_fwd == expected
 
 
 @pytest.mark.parametrize(
@@ -456,13 +462,13 @@ def test_length_reference_threeprime_fwd(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_reference_threeprime_rev(fwd_coords, rev_coords, expected):
+def test_len_ref_threeprime_rev(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_reference_threeprime_rev == expected
+    assert ds.len_ref_threeprime_rev == expected
 
 
 # ---------------------------------------------------------------------------
-# length_reference_fiveprime / length_reference_threeprime (strand-agnostic)
+# len_ref_fiveprime / len_ref_threeprime (strand-agnostic)
 # ---------------------------------------------------------------------------
 
 
@@ -482,9 +488,9 @@ def test_length_reference_threeprime_rev(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_reference_fiveprime(fwd_coords, rev_coords, expected):
+def test_len_ref_fiveprime(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_reference_fiveprime == expected
+    assert ds.len_ref_fiveprime == expected
 
 
 @pytest.mark.parametrize(
@@ -503,13 +509,13 @@ def test_length_reference_fiveprime(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_reference_threeprime(fwd_coords, rev_coords, expected):
+def test_len_ref_threeprime(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_reference_threeprime == expected
+    assert ds.len_ref_threeprime == expected
 
 
 # ---------------------------------------------------------------------------
-# length_endrepair / endrepair_removed_bases / endrepair_filled_bases
+# len_endrepair / endrepair_removed_bases / endrepair_filled_bases
 # ---------------------------------------------------------------------------
 
 
@@ -529,9 +535,9 @@ def test_length_reference_threeprime(fwd_coords, rev_coords, expected):
         ]
     ),
 )
-def test_length_endrepair(fwd_coords, rev_coords, expected):
+def test_len_endrepair(fwd_coords, rev_coords, expected):
     ds = make_ds(fwd_coords, rev_coords)
-    assert ds.length_endrepair == expected
+    assert ds.len_endrepair == expected
 
 
 @pytest.mark.parametrize(
@@ -640,6 +646,6 @@ def test_to_dict_includes_all_public_properties():
     ds = make_ds((0, 9), (3, 12), query_name="my-read")
     d = to_dict(ds)
     assert d["name"] == "my-read"
-    assert d["length_fwd"] == ds.length_fwd
-    assert d["length_rev"] == ds.length_rev
+    assert d["len_fwd"] == ds.len_fwd
+    assert d["len_rev"] == ds.len_rev
     assert d["type"] == ds.type
