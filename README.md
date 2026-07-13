@@ -6,7 +6,7 @@
 
 `pycyseq` is a python module to read and manipulate CySeq data.
 
-For documentation please visit: 
+For documentation please visit: [https://cyclomics.github.io/pycyseq/](https://cyclomics.github.io/pycyseq/)
 
 ## Installation
 
