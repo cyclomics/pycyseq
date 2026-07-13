@@ -1,0 +1,27 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# development notebooks
+ntb
+
+# temp files
+tmp
+
+# local configs
+.vscode
+
+# default logs path
+.logs
+
+# dev tools
+.ruff_cache
+
+.DS_Store

@@ -1,0 +1,41 @@
+[project]
+name = "pycyseq"
+version = "0.0.1"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pysam>=0.24.0,<0.24.1",
+]
+
+[tool.uv]
+package = true
+# this forces dependencies to have a lower and upper version bound to the minor value
+# this is done to be more explicit on the required versions
+add-bounds = "minor" 
+# this enforces to not use package versions newer than 30 days. This is a good way to 
+# improve security posture by delaying package updates until the community has had the 
+# opportunity to vet new versions of packages.
+exclude-newer = "P30D"
+
+[tool.setuptools]
+packages = ["pycyseq"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+# Add the `line-too-long` rule to the enforced rule set. By default, Ruff omits rules that
+# overlap with the use of a formatter, like Black, but we can override this behavior by
+# explicitly adding the rule.
+extend-select = []
+
+[dependency-groups]
+dev = [
+    "mkdocstrings-python>=2.0.3,<2.1.0",
+    "pre-commit>=4.5.1,<4.6.0",
+    "pytest>=9.0.3,<9.1.0",
+    "ruff>=0.14.14,<0.14.15",
+    "ty>=0.0.16,<0.0.17",
+    "zensical>=0.0.39,<0.0.40",
+]
