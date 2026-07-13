@@ -157,8 +157,8 @@ for alignment_group in read_cyseq_alignment_file(BAM_FILE):
         if aln.is_duplicate:
             continue
         
-        dsdna_fwd_lengths.append(aln.length_fwd)
-        dsdna_rev_lengths.append(aln.length_rev)
+        dsdna_fwd_lengths.append(aln.len_fwd)
+        dsdna_rev_lengths.append(aln.len_rev)
 
 # make the plot
 fig, ax = plt.subplots()
