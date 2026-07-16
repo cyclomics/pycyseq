@@ -33,7 +33,7 @@ class SingleStrandAlignment:
 
     @property
     def has_rotations(self) -> bool:
-        """Whether the DNA sequence has more than on possible rotation based on
+        """Whether the DNA sequence has more than one possible rotation based on
         alignment.
         """
         return True

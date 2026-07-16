@@ -24,9 +24,9 @@ If the DNA sequence uniquely maps to a single position in the reference genome i
 
 ### Unique mapping but multiple rotations
 
-Because CySeq reads original from circular DNA, sometimes there might me more than one equally likely mapping at the same genomic position. Since we are rotating the sequence of the CySeq read, we call these multiple mappings rotations.
+Because CySeq reads originate from circular DNA, sometimes there might me more than one equally likely mapping at the same genomic position. Since we are rotating the sequence of the CySeq read, we call these multiple mappings rotations.
 
-For example, the first `G` in the CySeq read matches the `*` marked `G` in the reference genome. However, because the CySeq sequence comes from a circle, we can rotate the sequence and therefore the same `G` could also map to the `&` marked `G` in the reference genome.
+For example, the first `G` in the CySeq read matches the `*`-marked `G` in the reference genome. However, because the CySeq sequence comes from a circle, we can rotate the sequence and therefore the same `G` could also map to the `&`-marked `G` in the reference genome.
 
 The primary alignment will always be the one that aligns to the 5' most position of the reference genome. Supplementary alignments will always rotate bases from the 5' to the 3' relative to the reference genome.
 
@@ -96,9 +96,9 @@ If the DNA sequences (fwd and rev) uniquely map to a single position in the refe
 
 ## Unique mapping but multiple rotations
 
-Because CySeq reads original from circular DNA, sometimes there might me more than one equally likely mapping at the same genomic position. In this case, it might not be possible to determine the precise start/end of the two strands because they were connected linearly. In the circle, the 3' end of forward strand is ligated to the 5' start of the reverse strand, and viceversa. If such case arises, we use supplementary alignments to annotate all the possible rotations.
+Because CySeq reads originate from circular DNA, sometimes there might me more than one equally likely mapping at the same genomic position. In this case, it might not be possible to determine the precise start/end of the two strands because they were connected linearly. In the circle, the 3' end of forward strand is ligated to the 5' start of the reverse strand, and viceversa. If such case arises, we use supplementary alignments to annotate all the possible rotations.
 
-Notice in the example below how the `A` base marked with an `*` on the forward strand could also belong to the reverse strand, since it would be complementary to the `T` base marked with a `&` on the forward strand. It is therefore possible to rotated the `A` base from the 5' end of the forward strand to the 3' end of the reverse strand (Supplementary alignment 2). 
+Notice in the example below how the `A` base marked with an `*` on the forward strand could also belong to the reverse strand, since it would be complementary to the `T` base marked with a `&` on the forward strand. It is therefore possible to rotate the `A` base from the 5' end of the forward strand to the 3' end of the reverse strand (Supplementary alignment 2). 
 
 The same logic can be applied to the `T` base marked with an `&` on the forward strand. After rotating the previous `A` base, we can also rotate it from the from the 5' end of the forward strand to the 3' end of the reverse strand (Supplementary alignment 3).
 
